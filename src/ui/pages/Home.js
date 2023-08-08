@@ -20,10 +20,10 @@ export default function Home(props) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#333',
-        alignItems: 'center',
-        paddingTop: 70
-      },
+  container: {
+      flex: 1,
+      backgroundColor: '#333',
+      alignItems: 'center',
+      paddingTop: 70
+  },
 });
