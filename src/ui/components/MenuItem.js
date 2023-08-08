@@ -4,7 +4,7 @@ import RightArrow from '../../assets/arrow.svg';
 
 export default function MenuItem(props) {
   return (
-    <TouchableOpacity style={styles.bar} onPress={() => props.navigation.navigate(props.link)}>
+    <TouchableOpacity style={styles.bar} onPress={() => props.navigation.navigate(props.link, { name: props.link })}>
       <Text style={styles.text}><props.icon /> {props.title} <RightArrow height={12} width={12} style={styles.arrow} /></Text>
     </TouchableOpacity>
   );

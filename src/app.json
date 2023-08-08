@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "EfficiencyLists",
+    "jsEngine": "hermes",
     "slug": "EfficiencyLists",
     "version": "1.0.0",
     "orientation": "portrait",
