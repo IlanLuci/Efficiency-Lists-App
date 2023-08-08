@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Animated,
-  Text,
-} from "react-native";
+import { StyleSheet, Animated, Text } from "react-native";
 
 export default function Expandable({ expanded = false }) {
   const [height] = useState(new Animated.Value(0));

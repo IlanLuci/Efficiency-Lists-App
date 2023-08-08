@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
 import { useState } from 'react';
 
 import Check from '../../assets/check.svg';
@@ -21,7 +21,7 @@ export default function MenuItem(props) {
                     <Check style={{ display: isChecked ? 'flex' : 'none', marginLeft: -9, marginTop: -8 }} />
                 </TouchableOpacity>
 
-                <TextInput editable={isActive} selectTextOnFocus={isActive} style={styles.text} onSubmitEditing={props.editTitle} onTouchStart={() => { if (!isActive) setIsActive(!isActive) }}>
+                <TextInput selectTextOnFocus={false} editable={isActive} style={styles.text} onEndEditing={props.editTitle} onTouchStart={() => { if (!isActive) setIsActive(!isActive) }}>
                     {props.title}
                 </TextInput>
             </View>
@@ -32,6 +32,7 @@ export default function MenuItem(props) {
         </TouchableOpacity>
     );
 }
+
 
 const styles = StyleSheet.create({
    bar: {
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text : {
+    padding: 3,
     color: "whitesmoke",
     fontSize: 16,
   },
