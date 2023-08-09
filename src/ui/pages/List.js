@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native';
 import { useRoute } from "@react-navigation/native"
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -37,11 +37,19 @@ export default function Home(props) {
                 <Arrow height={30} width={30} />
             </TouchableOpacity>
 
-            <ScrollView style={styles.items}>
-                {showData.map(dataItem => (
-                    <ListItem key={dataItem.id} title={dataItem.title} checked={dataItem.checked} onChecked={() => { checkItem(dataItem.id) }} editTitle={(text) => { editItemTitle(dataItem.id, text.nativeEvent.text) }} />
-                ))}
-            </ScrollView>
+            <FlatList 
+                data={showData}
+                renderItem={({item}) => <ListItem 
+                    key={item.id} 
+                    title={item.title} 
+                    checked={item.checked} 
+                    onChecked={() => { checkItem(item.id) }}
+                    onRemoved={() => { removeItem(item.id) }}
+                    editTitle={(text) => { editItemTitle(item.id, text.nativeEvent.text) }}
+                />}
+                keyExtractor={item => item.id}
+                style={styles.items} 
+            />
 
             <TouchableOpacity onPress={addItem} style={styles.new}>
                 <Plus />
@@ -77,7 +85,25 @@ export default function Home(props) {
         try {
             await AsyncStorage.setItem(`v1/list/${name}`, JSON.stringify(data));
         } catch (e) {
-            console.log(error)
+            console.log(error);
+            // saving error
+        }
+    }
+
+    async function removeItem(id) {
+        data = showData;
+
+        let item = data.find(item => item.id == id);
+        let index = data.indexOf(item);
+
+        data.splice(index, 1)
+
+        setShowData(data);
+
+        try {
+            await AsyncStorage.setItem(`v1/list/${name}`, JSON.stringify(data));
+        } catch (e) {
+            console.log(error);
             // saving error
         }
     }
@@ -95,7 +121,7 @@ export default function Home(props) {
         try {
             await AsyncStorage.setItem(`v1/list/${name}`, JSON.stringify(data));
         } catch (e) {
-            console.log(error)
+            console.log(error);
             // saving error
         }
     }
@@ -117,7 +143,8 @@ const styles = StyleSheet.create({
         padding: 7
     },
     items: {
-        width: "90%"
+        width: "95%",
+        left: "2.5%"
     },
     new: {
         backgroundColor: "#222",

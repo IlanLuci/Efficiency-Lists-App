@@ -2,6 +2,7 @@ import { StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
 import { useState } from 'react';
 
 import Check from '../../assets/check.svg';
+import Trash from '../../assets/trash.svg';
 
 import Expandable from '../components/Expandable';
 
@@ -21,9 +22,10 @@ export default function MenuItem(props) {
                     <Check style={{ display: isChecked ? 'flex' : 'none', marginLeft: -9, marginTop: -8 }} />
                 </TouchableOpacity>
 
-                <TextInput selectTextOnFocus={false} editable={isActive} style={styles.text} onEndEditing={props.editTitle} onTouchStart={() => { if (!isActive) setIsActive(!isActive) }}>
+                <TextInput selectTextOnFocus={false} editable={isActive} style={styles.text} onEndEditing={props.editTitle} onTouchEnd={() => { if (!isActive) setIsActive(!isActive) }}>
                     {props.title}
                 </TextInput>
+                <Trash onPress={() => { props.onRemoved() }} />
             </View>
 
             <View style={styles.row}>
@@ -53,6 +55,7 @@ const styles = StyleSheet.create({
     padding: 3,
     color: "whitesmoke",
     fontSize: 16,
+    width: "75%"
   },
   unchecked: {
     height: 32,
