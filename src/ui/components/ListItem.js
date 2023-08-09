@@ -29,7 +29,7 @@ export default function MenuItem(props) {
             </View>
 
             <View style={styles.row}>
-                <Expandable expanded={isActive} />
+                <Expandable description={props.description} editDescription={props.editDescription} expanded={isActive} />
             </View>
         </TouchableOpacity>
     );

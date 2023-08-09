@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Animated, Text } from "react-native";
+import { StyleSheet, Animated, Text, TextInput } from "react-native";
 
-export default function Expandable({ expanded = false }) {
+export default function Expandable({ expanded = false, editDescription, description }) {
   const [height] = useState(new Animated.Value(0));
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function Expandable({ expanded = false }) {
 
   return (
     <Animated.View style={{ display: expanded ? 'flex' : 'none'}}>
-        <Text style={styles.description}>description</Text>
+        <TextInput style={styles.description} onEndEditing={editDescription}>{description}</TextInput>
     </Animated.View>
   );
 };
@@ -23,9 +23,6 @@ const styles = StyleSheet.create({
     description: {
         color: 'whitesmoke',
         padding: 10,
-        borderTopWidth: 2,
-        borderColor: "whitesmoke",
-        borderStyle: 'solid',
-        marginTop: 10
+        marginTop: 10,
     }
 });

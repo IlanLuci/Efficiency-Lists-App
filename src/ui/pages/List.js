@@ -37,14 +37,16 @@ export default function Home(props) {
                 <Arrow height={30} width={30} />
             </TouchableOpacity>
 
-            <FlatList 
+            <FlatList
                 data={showData}
                 renderItem={({item}) => <ListItem 
                     key={item.id} 
                     title={item.title} 
+                    description={item.description}
                     checked={item.checked} 
                     onChecked={() => { checkItem(item.id) }}
                     onRemoved={() => { removeItem(item.id) }}
+                    editDescription={(text) => { editItemDesciption(item.id, text.nativeEvent.text) }}
                     editTitle={(text) => { editItemTitle(item.id, text.nativeEvent.text) }}
                 />}
                 keyExtractor={item => item.id}
@@ -60,7 +62,7 @@ export default function Home(props) {
     );
 
     async function addItem() {
-        let data = showData.length == 0 ? [{ "id": 0, "title": "untitled", "checked": false }] : [...showData, { "id": showData.length, "title": "untitled", "checked": false }];
+        let data = showData.length == 0 ? [{ "id": 0, "title": "untitled", "description": "description", "checked": false }] : [...showData, { "id": showData.length, "title": "untitled", "description": "description", "checked": false }];
 
         setShowData(data);
 
@@ -115,6 +117,24 @@ export default function Home(props) {
         let index = data.indexOf(item);
 
         data[index].title = text;
+
+        setShowData(data);
+
+        try {
+            await AsyncStorage.setItem(`v1/list/${name}`, JSON.stringify(data));
+        } catch (e) {
+            console.log(error);
+            // saving error
+        }
+    }
+
+    async function editItemDesciption(id, text) {
+        data = showData;
+
+        let item = data.find(item => item.id == id);
+        let index = data.indexOf(item);
+
+        data[index].description = text;
 
         setShowData(data);
 
