@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, View, TextInput } from 'react-native';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 import Check from '../../assets/check.svg';
 import Trash from '../../assets/trash.svg';
@@ -8,9 +8,9 @@ import Expandable from '../components/Expandable';
 
 export default function MenuItem(props) {
     const [isChecked, setIsChecked] = useState(props.checked);
-    const focus = useRef();
 
-    function changeState() {
+    // toggle the checkmark on the item when clicked
+    function toggleChecked() {
         setIsChecked(!isChecked);
         props.onChecked();
     }
@@ -18,16 +18,21 @@ export default function MenuItem(props) {
     return (
         <TouchableOpacity style={styles.bar} onPress={() => { props.setActive(props.id) }}>
             <View style={styles.row}>
-                <TouchableOpacity ref={focus} style={isChecked ? styles.checked : styles.unchecked} onPress={changeState}>
+                {/* checkmark icon */}
+                <TouchableOpacity style={isChecked ? styles.checked : styles.unchecked} onPress={toggleChecked}>
                     <Check style={{ display: isChecked ? 'flex' : 'none', marginLeft: -9, marginTop: -8 }} />
                 </TouchableOpacity>
 
+                {/* title input */}
                 <TextInput selectTextOnFocus={false} style={styles.text} onEndEditing={props.editTitle} onTouchEnd={() => { if (props.id !== props.activeItem) props.setActive(props.id) }}>
                     {props.title}
                 </TextInput>
+
+                {/* remove item button */}
                 <Trash onPress={() => { props.onRemoved() }} />
             </View>
 
+            {/* display description on selection */}
             <View style={styles.row}>
                 <Expandable description={props.description} editDescription={props.editDescription} expanded={props.id === props.activeItem} />
             </View>

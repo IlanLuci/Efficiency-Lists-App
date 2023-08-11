@@ -10,26 +10,34 @@ import Plus from '../../assets/plus.svg';
 import ListItem from '../components/ListItem';
 
 export default function Home(props) {
-    const [showData, setShowData] = useState([]);
+    const [listData, setlistData] = useState([]);
     const [activeID, setActiveID] = useState();
     const route = useRoute();
     const name = route.params?.name;
     
     try {
+        // get list items from storage
         AsyncStorage.getItem(`v1/list/${name}`).then(listJsonStr => {
             if (!listJsonStr) {
                 // TODO: display some sort of empty list message
-                return ('fail');
+                return ('empty');
             }
     
+            // parse list items into json
             const listJson = JSON.parse(listJsonStr);
 
-            setShowData(listJson);
+            if (listJson.length == 0) {
+                // TODO: display some sort of empty list message
+                return ('empty');
+            }
+
+            // display list items on page
+            setlistData(listJson);
         });
     } catch (error) {
         // TODO: display some sort of empty list message
         console.log(error)
-        return ('fail');
+        return ('empty');
     }
 
     return (
@@ -39,7 +47,7 @@ export default function Home(props) {
             </TouchableOpacity>
 
             <FlatList
-                data={showData}
+                data={listData}
                 renderItem={({item}) => <ListItem
                     activeItem={activeID}
                     setActive={(id) => { activeID === id ? setActiveID(null) : setActiveID(id) }}
@@ -66,88 +74,112 @@ export default function Home(props) {
     );
 
     async function addItem() {
-        let data = showData.length == 0 ? [{ "id": 0, "title": "untitled", "description": "description", "checked": false }] : [...showData, { "id": showData.length, "title": "untitled", "description": "description", "checked": false }];
+        // if the list is empty, initialize it
+        // otherwise add the new item to the end of the list
+        let data = listData.length == 0 ? [{ "id": 0, "title": "untitled", "description": "description", "checked": false }] : [...showData, { "id": showData.length, "title": "untitled", "description": "description", "checked": false }];
 
-        setShowData(data);
-        setActiveID(showData.length);
+        // update the list on the page
+        setlistData(data);
+        
+        // set the selected item to the newly created one
+        // this should expand the newly created item
+        // TODO: find some way to focus on the textinput for this item
+        setActiveID(listData.length);
 
         try {
+            // save the updated list to storage
             await AsyncStorage.setItem(`v1/list/${name}`, JSON.stringify(data));
         } catch (e) {
-            console.log(error)
-            // saving error
+            // error saving data
+            console.log(error);
         }
     }
 
     async function checkItem(id) {
-        data = showData;
+        data = listData;
 
+        // retrieve the index of the item with the id provided
         let item = data.find(item => item.id == id);
         let index = data.indexOf(item);
 
+        // toggle the items checked property
         data[index].checked = !data[index].checked;
 
-        setShowData(data);
+        // display the updates on the page
+        setlistData(data);
 
         try {
+            // save the updated list to storage
             await AsyncStorage.setItem(`v1/list/${name}`, JSON.stringify(data));
         } catch (e) {
+            // error saving data
             console.log(error);
-            // saving error
         }
     }
 
     async function removeItem(id) {
-        data = showData;
+        data = listData;
 
+        // retrieve the index of the item with the id provided
         let item = data.find(item => item.id == id);
         let index = data.indexOf(item);
 
+        // remove the item from the list
         data.splice(index, 1)
 
-        setShowData(data);
+        // display the updates on the page
+        setlistData(data);
 
         try {
+            // save the updated list to storage
             await AsyncStorage.setItem(`v1/list/${name}`, JSON.stringify(data));
         } catch (e) {
+            // error saving data
             console.log(error);
-            // saving error
         }
     }
 
     async function editItemTitle(id, text) {
-        data = showData;
+        data = listData;
 
+        // retrieve the index of the item with the id provided
         let item = data.find(item => item.id == id);
         let index = data.indexOf(item);
 
+        // update the item title with the new user inputted value
         data[index].title = text;
 
-        setShowData(data);
+        // display the updates on the page
+        setlistData(data);
 
         try {
+            // save the updated list to storage
             await AsyncStorage.setItem(`v1/list/${name}`, JSON.stringify(data));
         } catch (e) {
+            // error saving data
             console.log(error);
-            // saving error
         }
     }
 
     async function editItemDesciption(id, text) {
-        data = showData;
+        data = listData;
 
+        // retrieve the index of the item with the id provided
         let item = data.find(item => item.id == id);
         let index = data.indexOf(item);
 
+        // update the item description with the new user inputted value
         data[index].description = text;
 
-        setShowData(data);
+        // display the updates on the page
+        setlistData(data);
 
         try {
+            // save the updated list to storage
             await AsyncStorage.setItem(`v1/list/${name}`, JSON.stringify(data));
         } catch (e) {
+            // error saving data
             console.log(error);
-            // saving error
         }
     }
 }
