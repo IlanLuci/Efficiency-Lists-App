@@ -11,6 +11,7 @@ import ListItem from '../components/ListItem';
 
 export default function Home(props) {
     const [showData, setShowData] = useState([]);
+    const [activeID, setActiveID] = useState();
     const route = useRoute();
     const name = route.params?.name;
     
@@ -39,7 +40,10 @@ export default function Home(props) {
 
             <FlatList
                 data={showData}
-                renderItem={({item}) => <ListItem 
+                renderItem={({item}) => <ListItem
+                    activeItem={activeID}
+                    setActive={(id) => { activeID === id ? setActiveID(null) : setActiveID(id) }}
+                    id={item.id}
                     key={item.id} 
                     title={item.title} 
                     description={item.description}
@@ -65,6 +69,7 @@ export default function Home(props) {
         let data = showData.length == 0 ? [{ "id": 0, "title": "untitled", "description": "description", "checked": false }] : [...showData, { "id": showData.length, "title": "untitled", "description": "description", "checked": false }];
 
         setShowData(data);
+        setActiveID(showData.length);
 
         try {
             await AsyncStorage.setItem(`v1/list/${name}`, JSON.stringify(data));

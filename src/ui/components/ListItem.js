@@ -8,7 +8,6 @@ import Expandable from '../components/Expandable';
 
 export default function MenuItem(props) {
     const [isChecked, setIsChecked] = useState(props.checked);
-    const [isActive, setIsActive] = useState(false);
 
     function changeState() {
         setIsChecked(!isChecked);
@@ -16,20 +15,20 @@ export default function MenuItem(props) {
     }
 
     return (
-        <TouchableOpacity style={styles.bar} onPress={() => { setIsActive(!isActive); }}>
+        <TouchableOpacity style={styles.bar} onPress={() => { props.setActive(props.id) }}>
             <View style={styles.row}>
                 <TouchableOpacity style={isChecked ? styles.checked : styles.unchecked} onPress={changeState}>
                     <Check style={{ display: isChecked ? 'flex' : 'none', marginLeft: -9, marginTop: -8 }} />
                 </TouchableOpacity>
 
-                <TextInput selectTextOnFocus={false} editable={isActive} style={styles.text} onEndEditing={props.editTitle} onTouchEnd={() => { if (!isActive) setIsActive(!isActive) }}>
+                <TextInput selectTextOnFocus={false} editable={props.id === props.activeItem} style={styles.text} onEndEditing={props.editTitle} onTouchEnd={() => { if (!props.id === props.activeItem) props.setActive(props.id) }}>
                     {props.title}
                 </TextInput>
                 <Trash onPress={() => { props.onRemoved() }} />
             </View>
 
             <View style={styles.row}>
-                <Expandable description={props.description} editDescription={props.editDescription} expanded={isActive} />
+                <Expandable description={props.description} editDescription={props.editDescription} expanded={props.id === props.activeItem} />
             </View>
         </TouchableOpacity>
     );
