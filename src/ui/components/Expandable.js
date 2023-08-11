@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 
 export default function Expandable({ expanded, editDescription, description }) {
   // list item description that expands on selection

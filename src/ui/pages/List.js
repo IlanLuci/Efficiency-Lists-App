@@ -76,7 +76,7 @@ export default function Home(props) {
     async function addItem() {
         // if the list is empty, initialize it
         // otherwise add the new item to the end of the list
-        let data = listData.length == 0 ? [{ "id": 0, "title": "untitled", "description": "description", "checked": false }] : [...showData, { "id": showData.length, "title": "untitled", "description": "description", "checked": false }];
+        let data = listData.length == 0 ? [{ "id": 0, "title": "untitled", "description": "description", "checked": false }] : [...listData, { "id": listData.length, "title": "untitled", "description": "description", "checked": false }];
 
         // update the list on the page
         setlistData(data);
